@@ -37,7 +37,7 @@ class App extends Component {
 		var postersArray = [];
 		// First time through (when the component Mounts), this.state.movies will be an empty array
 		this.state.movies.map((movie,index)=>{
-			postersArray.push(<Poster key={index} poster={movie.poster_path} />)
+			postersArray.push(<Poster key={index} poster={movie.poster_path} title={movie.title} id={movie.id}/>)
 		});
 		return (
 		<div className="App">
