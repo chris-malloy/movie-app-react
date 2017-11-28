@@ -4,6 +4,7 @@ import './App.css';
 // import jquery for AJAX requests
 import $ from 'jquery';
 import Poster from './Poster';
+import Search from './Search';
 
 class App extends Component {
 	// a super for App - subclass of Component
@@ -42,6 +43,7 @@ class App extends Component {
 		return (
 		<div className="App">
 			<h1>This is the app...again.</h1>
+			<Search />
 			{postersArray}
 		</div>
 		);
@@ -49,3 +51,5 @@ class App extends Component {
 }
 
 export default App;
+
+// TODO - make a search bar
