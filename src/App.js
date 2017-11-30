@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 // import jquery for AJAX requests
 import $ from 'jquery';
@@ -12,10 +11,32 @@ class App extends Component {
 		super(props);
 		// initialize state
 		this.state = {
-			movies: [],
+			inputValue: '',
+			movies: []
 		}
+		// bind App this to handleSubmit this
+		this.handleSubmit = this.handleSubmit.bind(this);
+		this.updateInput = this.updateInput.bind(this);
 	};
 
+	updateInput(value){
+		this.setState({
+			inputValue: value
+		})
+	}
+
+	handleSubmit(event){
+		event.preventDefault();
+		var inputValue = this.state.inputValue;
+		var url = 'https://api.themoviedb.org/3/search/movie?api_key=fec8b5ab27b292a68294261bb21b04a5&query='+ inputValue;
+		$.getJSON(url,(movieSearchData)=>{
+			// update state on search
+			this.setState({
+				movies: movieSearchData.results
+			})
+        })
+	}
+	
 	// runs one time, before the first render
 	componentWillMount(){
 		console.log("The component will mount");
@@ -33,17 +54,23 @@ class App extends Component {
 			})
 		});
 	};
-
 	render() {
+		var inputValue = this.state.inputValue.slice().toLowerCase();
 		var postersArray = [];
 		// First time through (when the component Mounts), this.state.movies will be an empty array
-		this.state.movies.map((movie,index)=>{
-			postersArray.push(<Poster key={index} poster={movie.poster_path} title={movie.title} id={movie.id}/>)
+		postersArray = this.state.movies.map((movie,index)=>{
+			var movieTitle = movie.title.toLowerCase();
+			if(movieTitle.indexOf(inputValue) != -1){
+				return(
+					<Poster key={index} poster={movie.poster_path} title={movie.title} id={movie.id}/>
+				)
+			}
 		});
 		return (
 		<div className="App">
 			<h1>This is the app...again.</h1>
-			<Search />
+			<Search updateInput={this.updateInput}/>
+			{/* place Posters */}
 			{postersArray}
 		</div>
 		);
@@ -52,4 +79,4 @@ class App extends Component {
 
 export default App;
 
-// TODO - make a search bar
+// TODO - add functionality to search bar
